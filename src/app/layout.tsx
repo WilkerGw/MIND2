@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import { ProductsProvider } from "@/contexts/ProductsContext";
+import { ClientsProvider } from "@/contexts/ClientsContext";
+import { SalesProvider } from "@/contexts/SalesContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedLayout from "@/components/layout/ProtectedLayout"; // 1. Importar o nosso novo guarda
 
 export const metadata: Metadata = {
   title: "MIND ADM",
@@ -12,9 +17,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body>
-        {children}
+        <ThemeRegistry>
+          <AuthProvider>
+            <ProductsProvider>
+              <ClientsProvider>
+                <SalesProvider>
+                  {/* 2. O ProtectedLayout agora envolve o conteúdo da aplicação */}
+                  <ProtectedLayout>
+                    {children}
+                  </ProtectedLayout>
+                </SalesProvider>
+              </ClientsProvider>
+            </ProductsProvider>
+          </AuthProvider>
+        </ThemeRegistry>
       </body>
     </html>
   );
